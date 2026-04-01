@@ -74,15 +74,15 @@ function draw() {
   textStyle(BOLDITALIC);
   textAlign(LEFT, BASELINE);
  
-  fill(80, 45, 5, 120);
-  text("Marianne\u2019s Kitchen", 135, 386);
+  fill(80, 45, 5, 110);
+  text("Marianne\u2019s Kitchen", 98, 518);
  
   // Main gold title
   fill("#C9A84C");
-  text("Marianne\u2019s Kitchen", 131, 382);
+  text("Marianne\u2019s Kitchen", 90, 512);
  
   fill(220, 185, 100, 160);
-  text("Marianne\u2019s Kitchen", 131, 382);
+  text("Marianne\u2019s Kitchen", 90, 512);
  
   textStyle(NORMAL); 
 }
