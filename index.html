@@ -20,7 +20,7 @@
   >
 
   <style>
-    /* ── CSS CUSTOM PROPERTIES (DESIGN TOKENS) ──────────────
+    /* ── CSS CUSTOM PROPERTIES ──────────────
        All colors live here so they're easy to update in one place.
        var(--gold) etc. are used throughout instead of raw hex values. */
     :root {
@@ -339,7 +339,7 @@
 
 <!-- ── NAVIGATION ───────────────────────────────────────────
      Four links that anchor-scroll to each major section.
-     data-section attributes are read by JS to match against section IDs. -->
+    -->
 <nav id="main-nav">
   <div class="nav-inner">
     <a class="nav-item active" href="#home"    data-section="home">Home</a>
@@ -351,9 +351,9 @@
 
 <!-- ── HERO ──────────────────────────────────────────────────
      Full-screen section with the Kabab photo as the background.
-     onerror provides a dark fallback gradient if the image fails to load. -->
+     -->
 <section id="home">
-  <!-- FIX: path updated to img/Kabab.jpeg to match the img/ folder structure -->
+  <!-- path updated to img/Kabab.jpeg to match the img/ folder structure -->
   <img
     class="hero-img"
     src="img/Kabab.jpeg"
