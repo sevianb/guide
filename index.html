@@ -466,8 +466,8 @@
     });
   }
 
-  // IntersectionObserver fires setActive whenever a section enters the viewport
-  // threshold: 0.3 means 30% of the section must be visible to trigger
+  // IntersectionObserver initiates setActive, updates visibility of pages during scroll
+  // threshold: 0.3 means 30% of the section must be visible to trigger animation
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) setActive(e.target.id);
