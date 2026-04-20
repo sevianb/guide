@@ -9,10 +9,7 @@
   <!--
     EXTERNAL RESOURCE: Google Fonts
     Source: https://fonts.google.com
-    What it does: Loads two typefaces from Google's free font CDN —
-      • Cormorant Garamond – a classical serif used for body text, titles, and nav links
-      • Cormorant SC – a small-caps variant used for eyebrow labels and footer lines
-    How it's used: Both fonts are referenced throughout via font-family declarations.
+   
   -->
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+SC:wght@300;400;600&display=swap"
@@ -21,8 +18,7 @@
 
   <style>
     /* ── CSS CUSTOM PROPERTIES ──────────────
-       All colors live here so they're easy to update in one place.
-       var(--gold) etc. are used throughout instead of raw hex values. */
+    */
     :root {
       --gold:        #C9A44A; /* Primary gold – nav links, hero title, footer title */
       --gold-light:  #D4A85A; /* Slightly lighter gold – nav link default color */
@@ -54,7 +50,7 @@
 
     /* ── NAVIGATION ─────────────────────────────────────────
        Fixed to the top so it stays visible while scrolling.
-       Gold borders top and bottom give it a decorative frame. */
+    */
     nav {
       position: fixed;        /* Stays at top even when user scrolls */
       top: 0; left: 0; right: 0;
@@ -76,7 +72,7 @@
     }
 
     /* Individual nav link styling.
-       clamp(min, preferred, max) makes font size responsive to viewport width. */
+       clamp(font size responsive to viewing width*/
     .nav-item {
       display: flex;
       align-items: center;
@@ -95,7 +91,7 @@
     .nav-item:hover { color: #fff; }
 
     /* Gold underline that appears under the currently active nav link.
-       Width is set dynamically by JS via --underline-w custom property. */
+       Width is set dynamically */
     .nav-item.active::after {
       content: '';
       position: absolute;
@@ -131,7 +127,7 @@
       object-position: center;
     }
 
-    /* Dark radial gradient overlay so the title text reads clearly over the photo */
+    /* Dark radial gradient overlay for title clarity */
     .hero-vignette {
       position: absolute;
       inset: 0;
@@ -196,7 +192,7 @@
     }
 
     /* ── CATEGORY BANNER ────────────────────────────────────
-       Colored strip (amber or olive) that labels each recipe group. */
+       Colored strip that labels each recipe group. */
     .category-banner {
       width: 100%;
       padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
@@ -227,7 +223,7 @@
       position: relative;             /* So the absolute divider is contained here */
     }
 
-    /* Each photo cell – aspect-ratio keeps images consistent height */
+    /* Aspect-ratio keeps images consistent height */
     .image-cell {
       position: relative;
       overflow: hidden;
@@ -257,7 +253,7 @@
 
     /* ── CAPTIONS ───────────────────────────────────────────
        Two-column row below the photos with recipe name labels.
-       A faint vertical line between them mirrors the photo divider. */
+   */
     .captions {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -265,7 +261,7 @@
       position: relative;
     }
 
-    /* Pseudo-element creates the center divider line without extra HTML */
+    /* Pseudo-element creates the center divider line without extra HTML code */
     .captions::after {
       content: '';
       position: absolute;
@@ -322,8 +318,8 @@
     }
 
     /* ── SCROLL REVEAL ANIMATION ────────────────────────────
-       Elements with class .reveal start hidden and shifted down.
-       JS adds .visible when they scroll into view, triggering the transition. */
+       Elements with .reveal start hidden and become visible
+       JS adds .visible when they scroll into view, triggering transition */
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -484,8 +480,8 @@
   });
 
   // ── SCROLL REVEAL ─────────────────────────────────────────
-  // Adds .visible to .reveal elements as they scroll into view,
-  // triggering the CSS opacity + translateY transition defined above.
+  // Elements with .reveal start invisible and appear during scroll
+  // triggering the CSS opacity animation using a threshold 
   const revealEls = document.querySelectorAll('.reveal');
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
