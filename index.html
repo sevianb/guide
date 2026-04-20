@@ -1,460 +1,505 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marianne's Kitchen</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+SC:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --gold:        #C9A44A;
-    --gold-light:  #D4A85A;
-    --gold-dark:   #8B6914;
-    --gold-accent: #B8933A;
-    --amber:       #C07B2A;
-    --olive:       #A89A52;
-    --dark:        #1C140A;
-    --dark-nav:    rgba(28,20,10,0.97);
-    --cream:       #FAF6EF;
-    --rule:        rgba(210,200,185,0.5);
-  }
- 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
-  html { scroll-behavior: smooth; }
- 
-  body {
-    font-family: 'Cormorant Garamond', serif;
-    background: var(--cream);
-    color: var(--dark);
-    overflow-x: hidden;
-  }
- 
-  /* ── NAV ─────────────────────────────────────────── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    height: 68px;
-    background: var(--dark-nav);
-    display: flex;
-    align-items: center;
-    border-top: 2px solid var(--gold);
-    border-bottom: 2px solid var(--gold-accent);
-  }
- 
-  .nav-inner {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    height: 100%;
-  }
- 
-  .nav-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    font-size: clamp(22px, 3.3vw, 48px);
-    font-family: 'Cormorant Garamond', serif;
-    color: var(--gold-light);
-    text-decoration: none;
-    position: relative;
-    cursor: pointer;
-    transition: color 0.2s;
-    border-right: 1px solid #8B691440;
-  }
-  .nav-item:last-child { border-right: none; }
-  .nav-item:hover { color: #fff; }
- 
-  .nav-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 1.5px;
-    background: var(--gold);
-    width: var(--underline-w, 60px);
-    transition: width 0.3s;
-  }
- 
-  /* ── HERO ─────────────────────────────────────────── */
-  #home {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 560px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    overflow: hidden;
-  }
- 
-  .hero-img {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
- 
-  .hero-vignette {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 20%, rgba(0,0,0,0.48) 100%);
-  }
- 
-  .hero-title {
-    position: relative;
-    z-index: 2;
-    font-size: clamp(52px, 10.5vw, 155px);
-    font-style: italic;
-    font-weight: 700;
-    color: var(--gold);
-    text-align: center;
-    padding-bottom: clamp(24px, 5vh, 60px);
-    text-shadow:
-      4px 4px 0 rgba(80,45,5,0.45),
-      0 0 60px rgba(201,168,76,0.25);
-    letter-spacing: -0.01em;
-    line-height: 1;
-    animation: fadeUp 1s ease both;
-  }
- 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
- 
-  /* ── SECTION SHELL ───────────────────────────────── */
-  .recipe-section {
-    background: #fff;
-  }
- 
-  /* ── SECTION HEADER ──────────────────────────────── */
-  .section-header {
-    padding: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
-    background: #fff;
-  }
- 
-  .section-eyebrow {
-    font-family: 'Cormorant SC', serif;
-    font-size: clamp(11px, 1.2vw, 16px);
-    letter-spacing: 0.18em;
-    color: var(--gold-dark);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
- 
-  .section-title {
-    font-size: clamp(52px, 7vw, 110px);
-    font-weight: 300;
-    line-height: 1;
-    color: var(--dark);
-    letter-spacing: -0.01em;
-  }
- 
-  /* ── BANNER ──────────────────────────────────────── */
-  .category-banner {
-    width: 100%;
-    padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
-    display: flex;
-    align-items: flex-end;
-  }
- 
-  .category-banner--amber { background: var(--amber); }
-  .category-banner--olive  { background: var(--olive); }
- 
-  .category-name {
-    font-size: clamp(28px, 4.5vw, 62px);
-    font-style: italic;
-    color: #fff;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-    line-height: 1.1;
-  }
- 
-  /* ── IMAGE GRID ──────────────────────────────────── */
-  .image-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
-  }
- 
-  .image-cell {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 4/3;
-  }
- 
-  .image-cell img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s ease;
-  }
-  .image-cell:hover img { transform: scale(1.04); }
- 
-  .grid-divider {
-    position: absolute;
-    top: 0; bottom: 0;
-    left: 50%;
-    width: 4px;
-    background: #fff;
-    transform: translateX(-50%);
-    z-index: 2;
-    pointer-events: none;
-  }
- 
-  /* ── CAPTIONS ────────────────────────────────────── */
-  .captions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--rule);
-    position: relative;
-  }
- 
-  .captions::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0;
-    left: 50%;
-    width: 1px;
-    background: var(--rule);
-  }
- 
-  .caption {
-    padding: clamp(16px, 2.5vw, 32px) clamp(20px, 3vw, 40px);
-    font-size: clamp(20px, 2vw, 38px);
-    font-weight: 400;
-    color: var(--dark);
-    letter-spacing: 0.01em;
-  }
- 
-  /* ── SECTION SEPARATOR ───────────────────────────── */
-  .section-rule {
-    height: 1px;
-    background: var(--rule);
-    margin: 0 clamp(24px, 4vw, 56px);
-  }
- 
-  /* ── PLACEHOLDER SECTIONS ────────────────────────── */
-  .placeholder-section {
-    min-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    background: #fff;
-    padding: 80px 40px;
-  }
- 
-  .placeholder-eyebrow {
-    font-family: 'Cormorant SC', serif;
-    font-size: clamp(11px, 1.2vw, 15px);
-    letter-spacing: 0.2em;
-    color: var(--gold-dark);
-    text-transform: uppercase;
-  }
- 
-  .placeholder-title {
-    font-size: clamp(40px, 6vw, 90px);
-    font-weight: 300;
-    color: var(--dark);
-    text-align: center;
-  }
- 
-  .placeholder-body {
-    font-size: clamp(16px, 1.5vw, 22px);
-    color: #888;
-    font-style: italic;
-    text-align: center;
-    max-width: 480px;
-    line-height: 1.7;
-  }
- 
-  /* ── FOOTER ──────────────────────────────────────── */
-  footer {
-    background: var(--dark);
-    padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 56px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    border-top: 2px solid var(--gold-accent);
-  }
- 
-  .footer-title {
-    font-size: clamp(22px, 3vw, 40px);
-    font-style: italic;
-    color: var(--gold);
-    letter-spacing: 0.02em;
-  }
- 
-  .footer-line {
-    font-size: clamp(11px, 1.1vw, 14px);
-    font-family: 'Cormorant SC', serif;
-    letter-spacing: 0.15em;
-    color: var(--gold-dark);
-    text-transform: uppercase;
-  }
- 
-  /* Scroll-in animation */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
-</style>
+  <meta charset="UTF-8">
+  <!-- Makes the page scale correctly on phones and tablets -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marianne's Kitchen</title>
+
+  <!--
+    EXTERNAL RESOURCE: Google Fonts
+    Source: https://fonts.google.com
+    What it does: Loads two typefaces from Google's free font CDN —
+      • Cormorant Garamond – a classical serif used for body text, titles, and nav links
+      • Cormorant SC – a small-caps variant used for eyebrow labels and footer lines
+    How it's used: Both fonts are referenced throughout via font-family declarations.
+  -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+SC:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    /* ── CSS CUSTOM PROPERTIES (DESIGN TOKENS) ──────────────
+       All colors live here so they're easy to update in one place.
+       var(--gold) etc. are used throughout instead of raw hex values. */
+    :root {
+      --gold:        #C9A44A; /* Primary gold – nav links, hero title, footer title */
+      --gold-light:  #D4A85A; /* Slightly lighter gold – nav link default color */
+      --gold-dark:   #8B6914; /* Darker gold – eyebrow labels, footer small text */
+      --gold-accent: #B8933A; /* Mid gold – nav bottom border, footer top border */
+      --amber:       #C07B2A; /* Warm amber – first category banner background */
+      --olive:       #A89A52; /* Muted olive – second category banner background */
+      --dark:        #1C140A; /* Near-black – body text, footer background */
+      --dark-nav:    rgba(28,20,10,0.97); /* Semi-transparent dark – nav background */
+      --cream:       #FAF6EF; /* Off-white – page background */
+      --rule:        rgba(210,200,185,0.5); /* Soft beige – divider lines */
+    }
+
+    /* ── GLOBAL RESET ───────────────────────────────────────
+       Removes browser default spacing and makes sizing consistent.
+       box-sizing: border-box means padding/border are included in width/height. */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Enables smooth scrolling when clicking anchor links in the nav */
+    html { scroll-behavior: smooth; }
+
+    /* Base page styles – font, background, text color, and prevent horizontal scroll */
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVIGATION ─────────────────────────────────────────
+       Fixed to the top so it stays visible while scrolling.
+       Gold borders top and bottom give it a decorative frame. */
+    nav {
+      position: fixed;        /* Stays at top even when user scrolls */
+      top: 0; left: 0; right: 0;
+      z-index: 100;           /* Sits above all other content */
+      height: 68px;
+      background: var(--dark-nav);
+      display: flex;
+      align-items: center;
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold-accent);
+    }
+
+    /* 4-column grid so each nav link gets exactly 25% of the width */
+    .nav-inner {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      height: 100%;
+    }
+
+    /* Individual nav link styling.
+       clamp(min, preferred, max) makes font size responsive to viewport width. */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-size: clamp(22px, 3.3vw, 48px); /* Scales between 22px and 48px */
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--gold-light);
+      text-decoration: none;
+      position: relative;    /* Needed for the ::after underline to be positioned */
+      cursor: pointer;
+      transition: color 0.2s; /* Smooth color change on hover */
+      border-right: 1px solid #8B691440; /* Faint gold divider between links */
+    }
+    .nav-item:last-child { border-right: none; } /* No divider after last link */
+    .nav-item:hover { color: #fff; }
+
+    /* Gold underline that appears under the currently active nav link.
+       Width is set dynamically by JS via --underline-w custom property. */
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%); /* Centers the underline under the text */
+      height: 1.5px;
+      background: var(--gold);
+      width: var(--underline-w, 60px); /* JS sets this; 60px is the fallback */
+      transition: width 0.3s;
+    }
+
+    /* ── HERO SECTION ───────────────────────────────────────
+       Full-viewport-height section with the background image and title.
+       Uses flexbox to push the title to the bottom of the section. */
+    #home {
+      position: relative;
+      width: 100%;
+      height: 100vh;         /* Full screen height */
+      min-height: 560px;     /* Never smaller than 560px even on tiny screens */
+      display: flex;
+      align-items: flex-end; /* Title sits at the bottom of the hero */
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Hero background image – stretches to fill the entire section */
+    .hero-img {
+      position: absolute;
+      inset: 0;              /* Shorthand for top/right/bottom/left: 0 */
+      width: 100%; height: 100%;
+      object-fit: cover;     /* Crops image to fill without distorting */
+      object-position: center;
+    }
+
+    /* Dark radial gradient overlay so the title text reads clearly over the photo */
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0) 20%, rgba(0,0,0,0.48) 100%);
+    }
+
+    /* Main hero title – large italic serif in gold with a subtle drop shadow.
+       Animates upward on page load via the fadeUp keyframe below. */
+    .hero-title {
+      position: relative;
+      z-index: 2;            /* Sits above the vignette overlay */
+      font-size: clamp(52px, 10.5vw, 155px); /* Responsive: 52px → 155px */
+      font-style: italic;
+      font-weight: 700;
+      color: var(--gold);
+      text-align: center;
+      padding-bottom: clamp(24px, 5vh, 60px);
+      text-shadow:
+        4px 4px 0 rgba(80,45,5,0.45),       /* Brown offset shadow for depth */
+        0 0 60px rgba(201,168,76,0.25);      /* Soft gold glow */
+      letter-spacing: -0.01em;
+      line-height: 1;
+      animation: fadeUp 1s ease both;        /* Plays once on load */
+    }
+
+    /* Keyframe: element starts 30px lower and invisible, rises to normal position */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RECIPE SECTION SHELL ───────────────────────────── */
+    .recipe-section {
+      background: #fff;
+    }
+
+    /* ── SECTION HEADER ─────────────────────────────────────
+       Contains the eyebrow label ("Dinner Is Served") and large title ("Recipes").
+       clamp() keeps padding proportional at any screen width. */
+    .section-header {
+      padding: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
+      background: #fff;
+    }
+
+    /* Small all-caps label above the section title */
+    .section-eyebrow {
+      font-family: 'Cormorant SC', serif;
+      font-size: clamp(11px, 1.2vw, 16px);
+      letter-spacing: 0.18em;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* Large display title for the section */
+    .section-title {
+      font-size: clamp(52px, 7vw, 110px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--dark);
+      letter-spacing: -0.01em;
+    }
+
+    /* ── CATEGORY BANNER ────────────────────────────────────
+       Colored strip (amber or olive) that labels each recipe group. */
+    .category-banner {
+      width: 100%;
+      padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
+      display: flex;
+      align-items: flex-end;
+    }
+
+    /* Modifier classes apply different background colors to each banner */
+    .category-banner--amber { background: var(--amber); }
+    .category-banner--olive  { background: var(--olive); }
+
+    /* Italic white label inside the banner */
+    .category-name {
+      font-size: clamp(28px, 4.5vw, 62px);
+      font-style: italic;
+      color: #fff;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+    }
+
+    /* ── IMAGE GRID ─────────────────────────────────────────
+       Two-column grid for the food photos.
+       A white divider bar runs down the center via .grid-divider. */
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Two equal columns */
+      position: relative;             /* So the absolute divider is contained here */
+    }
+
+    /* Each photo cell – aspect-ratio keeps images consistent height */
+    .image-cell {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3; /* Width:height ratio – maintains shape at any size */
+    }
+
+    /* Photo scales up slightly on hover for a subtle interactive feel */
+    .image-cell img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .image-cell:hover img { transform: scale(1.04); }
+
+    /* White vertical bar between the two photos */
+    .grid-divider {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 4px;
+      background: #fff;
+      transform: translateX(-50%);
+      z-index: 2;
+      pointer-events: none; /* Clicks pass through to images below */
+    }
+
+    /* ── CAPTIONS ───────────────────────────────────────────
+       Two-column row below the photos with recipe name labels.
+       A faint vertical line between them mirrors the photo divider. */
+    .captions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--rule);
+      position: relative;
+    }
+
+    /* Pseudo-element creates the center divider line without extra HTML */
+    .captions::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: var(--rule);
+    }
+
+    /* Individual caption text */
+    .caption {
+      padding: clamp(16px, 2.5vw, 32px) clamp(20px, 3vw, 40px);
+      font-size: clamp(20px, 2vw, 38px);
+      font-weight: 400;
+      color: var(--dark);
+      letter-spacing: 0.01em;
+    }
+
+    /* ── SECTION SEPARATOR ──────────────────────────────────
+       1px faint horizontal rule between recipe groups. */
+    .section-rule {
+      height: 1px;
+      background: var(--rule);
+      margin: 0 clamp(24px, 4vw, 56px);
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────
+       Dark background with centered text and a gold top border. */
+    footer {
+      background: var(--dark);
+      padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      border-top: 2px solid var(--gold-accent);
+    }
+
+    /* Site name in footer */
+    .footer-title {
+      font-size: clamp(22px, 3vw, 40px);
+      font-style: italic;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    /* Tagline in small caps below the footer title */
+    .footer-line {
+      font-size: clamp(11px, 1.1vw, 14px);
+      font-family: 'Cormorant SC', serif;
+      letter-spacing: 0.15em;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+    }
+
+    /* ── SCROLL REVEAL ANIMATION ────────────────────────────
+       Elements with class .reveal start hidden and shifted down.
+       JS adds .visible when they scroll into view, triggering the transition. */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none; /* Resets to natural position */
+    }
+  </style>
 </head>
 <body>
- 
-<!-- ── NAVIGATION ───────────────────────────────────── -->
+
+<!-- ── NAVIGATION ───────────────────────────────────────────
+     Four links that anchor-scroll to each major section.
+     data-section attributes are read by JS to match against section IDs. -->
 <nav id="main-nav">
   <div class="nav-inner">
     <a class="nav-item active" href="#home"    data-section="home">Home</a>
-    <a class="nav-item"        href="#recipes"  data-section="recipes">Recipes</a>
-    <a class="nav-item"        href="#bazaar"   data-section="bazaar">Bazaar</a>
-    <a class="nav-item"        href="#about"    data-section="about">About</a>
+    <a class="nav-item"        href="#recipes" data-section="recipes">Recipes</a>
+    <a class="nav-item"        href="#bazaar"  data-section="bazaar">Bazaar</a>
+    <a class="nav-item"        href="#about"   data-section="about">About</a>
   </div>
 </nav>
- 
-<!-- ── HERO ─────────────────────────────────────────── -->
+
+<!-- ── HERO ──────────────────────────────────────────────────
+     Full-screen section with the Kabab photo as the background.
+     onerror provides a dark fallback gradient if the image fails to load. -->
 <section id="home">
-  <!-- Replace src with your actual Kabab.jpeg path -->
-  <img class="hero-img" src="Kabab.jpeg" alt="Kabab with saffron rice" onerror="this.style.background='linear-gradient(160deg,#3a2800,#1c1408)';this.removeAttribute('src')">
-  <div class="hero-vignette"></div>
+  <!-- FIX: path updated to img/Kabab.jpeg to match the img/ folder structure -->
+  <img
+    class="hero-img"
+    src="img/Kabab.jpeg"
+    alt="Kabab with saffron rice"
+    onerror="this.style.background='linear-gradient(160deg,#3a2800,#1c1408)';this.removeAttribute('src')"
+  >
+  <div class="hero-vignette"></div> <!-- Dark overlay so title is readable -->
   <h1 class="hero-title">Marianne's Kitchen</h1>
 </section>
- 
-<!-- ── RECIPES ───────────────────────────────────────── -->
+
+<!-- ── RECIPES SECTION ───────────────────────────────────────
+     Two recipe groups, each with: header → banner → photo grid → captions.
+     .reveal class makes each group animate in as the user scrolls down. -->
 <section id="recipes" class="recipe-section">
- 
-  <!-- Khoresh & Stuffed Peppers -->
+
+  <!-- GROUP 1: Khoresh & Stuffed Peppers ────────────────── -->
   <div class="reveal">
     <div class="section-header">
       <div class="section-eyebrow">Dinner Is Served</div>
       <div class="section-title">Recipes</div>
     </div>
- 
+
+    <!-- Amber-colored category label -->
     <div class="category-banner category-banner--amber">
       <div class="category-name">Khoresh &amp; Stuffed Peppers</div>
     </div>
- 
+
+    <!-- Two-up photo grid -->
     <div class="image-grid">
-      <!-- Replace src with your actual image paths -->
+      <!-- FIX: all src paths updated to img/ prefix -->
       <div class="image-cell">
-        <img src="sabzi.jpeg" alt="Khoresh" onerror="this.style.background='#c07b2a44'">
+        <img src="img/sabzi.jpeg" alt="Khoresh Sabzi" onerror="this.style.background='#c07b2a44'">
       </div>
       <div class="image-cell">
-        <img src="stuffedpep.jpg" alt="Stuffed Peppers" onerror="this.style.background='#c07b2a44'">
+        <img src="img/stuffedpep.jpg" alt="Stuffed Peppers" onerror="this.style.background='#c07b2a44'">
       </div>
-      <div class="grid-divider"></div>
+      <div class="grid-divider"></div> <!-- White bar between the two photos -->
     </div>
- 
+
+    <!-- Labels beneath each photo -->
     <div class="captions">
       <div class="caption">Khoresh</div>
       <div class="caption">Stuffed Peppers</div>
     </div>
   </div>
- 
+
+  <!-- Thin horizontal rule between the two recipe groups -->
   <div class="section-rule"></div>
- 
-  <!-- Rice & Tahdig -->
+
+  <!-- GROUP 2: Rice & Tahdig ────────────────────────────── -->
   <div class="reveal">
     <div class="section-header">
       <div class="section-eyebrow">The Base and Basics</div>
       <div class="section-title">Recipes</div>
     </div>
- 
+
+    <!-- Olive-colored category label -->
     <div class="category-banner category-banner--olive">
       <div class="category-name">Rice &amp; Tahdig</div>
     </div>
- 
+
+    <!-- Two-up photo grid -->
     <div class="image-grid">
       <div class="image-cell">
-        <img src="tahdig.jpeg" alt="Tahdig (rice)" onerror="this.style.background='#a89a5244'">
+        <img src="img/tahdig.jpeg" alt="Tahdig (rice)" onerror="this.style.background='#a89a5244'">
       </div>
       <div class="image-cell">
-        <img src="tahdig2.jpeg" alt="Tahdig (potato)" onerror="this.style.background='#a89a5244'">
+        <img src="img/tahdig2.jpeg" alt="Tahdig (potato)" onerror="this.style.background='#a89a5244'">
       </div>
       <div class="grid-divider"></div>
     </div>
- 
+
     <div class="captions">
       <div class="caption">Tahdig (rice)</div>
       <div class="caption">Tahdig (potato)</div>
     </div>
   </div>
- 
+
 </section>
- 
-<!-- ── BAZAAR ────────────────────────────────────────── -->
-<section id="bazaar" style="min-height:100vh;background:#fff;"></section>
- 
-<!-- ── ABOUT ─────────────────────────────────────────── -->
-<section id="about" style="min-height:100vh;background:#fff;"></section>
- 
-<!-- ── FOOTER ────────────────────────────────────────── -->
+
+<!-- ── BAZAAR & ABOUT ─────────────────────────────────────────
+     Placeholder sections – full viewport height, ready to be built out. -->
+<section id="bazaar" style="min-height:100vh; background:#fff;"></section>
+<section id="about"  style="min-height:100vh; background:#fff;"></section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
 <footer>
   <div class="footer-title">Marianne's Kitchen</div>
   <div class="footer-line">Persian Recipes &amp; Pantry</div>
 </footer>
- 
+
 <script>
-  // ── Active nav on scroll ──────────────────────────────
-  const sections = ['home','recipes','bazaar','about'];
+  // ── ACTIVE NAV HIGHLIGHT ──────────────────────────────────
+  // Watches which section is on screen and marks the matching nav link as active.
+
+  const sections = ['home', 'recipes', 'bazaar', 'about'];
   const navItems = document.querySelectorAll('.nav-item');
- 
+
+  // Adds/removes the .active class and sets the gold underline width to match the text
   function setActive(id) {
     navItems.forEach(a => {
       const isActive = a.dataset.section === id;
       a.classList.toggle('active', isActive);
+
       if (isActive) {
-        // measure text width for underline
+        // Measure the text width so the underline is the same width as the label
         const span = document.createElement('span');
         span.style.cssText = 'position:absolute;visibility:hidden;font-family:Cormorant Garamond,serif;font-size:48px';
         span.textContent = a.textContent;
         document.body.appendChild(span);
         a.style.setProperty('--underline-w', span.offsetWidth + 'px');
-        document.body.removeChild(span);
+        document.body.removeChild(span); // Clean up the temporary measurement element
       }
     });
   }
- 
+
+  // IntersectionObserver fires setActive whenever a section enters the viewport
+  // threshold: 0.3 means 30% of the section must be visible to trigger
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) setActive(e.target.id);
     });
   }, { threshold: 0.3 });
- 
+
   sections.forEach(id => {
     const el = document.getElementById(id);
     if (el) observer.observe(el);
   });
- 
-  // ── Reveal on scroll ──────────────────────────────────
+
+  // ── SCROLL REVEAL ─────────────────────────────────────────
+  // Adds .visible to .reveal elements as they scroll into view,
+  // triggering the CSS opacity + translateY transition defined above.
   const revealEls = document.querySelectorAll('.reveal');
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('visible');
-        revealObs.unobserve(e.target);
+        revealObs.unobserve(e.target); // Only animate in once, then stop watching
       }
     });
-  }, { threshold: 0.08 });
- 
+  }, { threshold: 0.08 }); // 8% visible is enough to start the animation
+
   revealEls.forEach(el => revealObs.observe(el));
- 
-  // ── Nav underline width on load ───────────────────────
+
+  // Set the correct active nav link immediately on page load (before any scrolling)
   setActive('home');
 </script>
 </body>
 </html>
- 
