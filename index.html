@@ -1,18 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Guide</title>
-
-    <link rel="stylesheet" type="text/css" href="style.css">
-
-    <script src="libraries/p5.min.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
-  </head>
-
-  <body>
-    <script src="sketch.js"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marianne's Kitchen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+SC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:        #C9A44A;
+    --gold-light:  #D4A85A;
+    --gold-dark:   #8B6914;
+    --gold-accent: #B8933A;
+    --amber:       #C07B2A;
+    --olive:       #A89A52;
+    --dark:        #1C140A;
+    --dark-nav:    rgba(28,20,10,0.97);
+    --cream:       #FAF6EF;
+    --rule:        rgba(210,200,185,0.5);
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+ 
+  /* ── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 68px;
+    background: var(--dark-nav);
+    display: flex;
+    align-items: center;
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold-accent);
+  }
+ 
+  .nav-inner {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 100%;
+  }
+ 
+  .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: clamp(22px, 3.3vw, 48px);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-light);
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.2s;
+    border-right: 1px solid #8B691440;
+  }
+  .nav-item:last-child { border-right: none; }
+  .nav-item:hover { color: #fff; }
+ 
+  .nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 1.5px;
+    background: var(--gold);
+    width: var(--underline-w, 60px);
+    transition: width 0.3s;
+  }
+ 
+  /* ── HERO ─────────────────────────────────────────── */
+  #home {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 560px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+ 
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+ 
+  .hero-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 20%, rgba(0,0,0,0.48) 100%);
+  }
+ 
+  .hero-title {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(52px, 10.5vw, 155px);
+    font-style: italic;
+    font-weight: 700;
+    color: var(--gold);
+    text-align: center;
+    padding-bottom: clamp(24px, 5vh, 60px);
+    text-shadow:
+      4px 4px 0 rgba(80,45,5,0.45),
+      0 0 60px rgba(201,168,76,0.25);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    animation: fadeUp 1s ease both;
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* ── SECTION SHELL ───────────────────────────────── */
+  .recipe-section {
+    background: #fff;
+  }
+ 
+  /* ── SECTION HEADER ──────────────────────────────── */
+  .section-header {
+    padding: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
+    background: #fff;
+  }
+ 
+  .section-eyebrow {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(11px, 1.2vw, 16px);
+    letter-spacing: 0.18em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+ 
+  .section-title {
+    font-size: clamp(52px, 7vw, 110px);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--dark);
+    letter-spacing: -0.01em;
+  }
+ 
+  /* ── BANNER ──────────────────────────────────────── */
+  .category-banner {
+    width: 100%;
+    padding: clamp(28px, 4vw, 56px) clamp(24px, 4vw, 56px) clamp(20px, 3vw, 40px);
+    display: flex;
+    align-items: flex-end;
+  }
+ 
+  .category-banner--amber { background: var(--amber); }
+  .category-banner--olive  { background: var(--olive); }
+ 
+  .category-name {
+    font-size: clamp(28px, 4.5vw, 62px);
+    font-style: italic;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+ 
+  /* ── IMAGE GRID ──────────────────────────────────── */
+  .image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+  }
+ 
+  .image-cell {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+ 
+  .image-cell img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .image-cell:hover img { transform: scale(1.04); }
+ 
+  .grid-divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: #fff;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+  }
+ 
+  /* ── CAPTIONS ────────────────────────────────────── */
+  .captions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    position: relative;
+  }
+ 
+  .captions::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--rule);
+  }
+ 
+  .caption {
+    padding: clamp(16px, 2.5vw, 32px) clamp(20px, 3vw, 40px);
+    font-size: clamp(20px, 2vw, 38px);
+    font-weight: 400;
+    color: var(--dark);
+    letter-spacing: 0.01em;
+  }
+ 
+  /* ── SECTION SEPARATOR ───────────────────────────── */
+  .section-rule {
+    height: 1px;
+    background: var(--rule);
+    margin: 0 clamp(24px, 4vw, 56px);
+  }
+ 
+  /* ── PLACEHOLDER SECTIONS ────────────────────────── */
+  .placeholder-section {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: #fff;
+    padding: 80px 40px;
+  }
+ 
+  .placeholder-eyebrow {
+    font-family: 'Cormorant SC', serif;
+    font-size: clamp(11px, 1.2vw, 15px);
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+  }
+ 
+  .placeholder-title {
+    font-size: clamp(40px, 6vw, 90px);
+    font-weight: 300;
+    color: var(--dark);
+    text-align: center;
+  }
+ 
+  .placeholder-body {
+    font-size: clamp(16px, 1.5vw, 22px);
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    max-width: 480px;
+    line-height: 1.7;
+  }
+ 
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer {
+    background: var(--dark);
+    padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 56px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    border-top: 2px solid var(--gold-accent);
+  }
+ 
+  .footer-title {
+    font-size: clamp(22px, 3vw, 40px);
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+  }
+ 
+  .footer-line {
+    font-size: clamp(11px, 1.1vw, 14px);
+    font-family: 'Cormorant SC', serif;
+    letter-spacing: 0.15em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+  }
+ 
+  /* Scroll-in animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+</head>
+<body>
+ 
+<!-- ── NAVIGATION ───────────────────────────────────── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a class="nav-item active" href="#home"    data-section="home">Home</a>
+    <a class="nav-item"        href="#recipes"  data-section="recipes">Recipes</a>
+    <a class="nav-item"        href="#bazaar"   data-section="bazaar">Bazaar</a>
+    <a class="nav-item"        href="#about"    data-section="about">About</a>
+  </div>
+</nav>
+ 
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section id="home">
+  <!-- Replace src with your actual Kabab.jpeg path -->
+  <img class="hero-img" src="Kabab.jpeg" alt="Kabab with saffron rice" onerror="this.style.background='linear-gradient(160deg,#3a2800,#1c1408)';this.removeAttribute('src')">
+  <div class="hero-vignette"></div>
+  <h1 class="hero-title">Marianne's Kitchen</h1>
+</section>
+ 
+<!-- ── RECIPES ───────────────────────────────────────── -->
+<section id="recipes" class="recipe-section">
+ 
+  <!-- Khoresh & Stuffed Peppers -->
+  <div class="reveal">
+    <div class="section-header">
+      <div class="section-eyebrow">Dinner Is Served</div>
+      <div class="section-title">Recipes</div>
+    </div>
+ 
+    <div class="category-banner category-banner--amber">
+      <div class="category-name">Khoresh &amp; Stuffed Peppers</div>
+    </div>
+ 
+    <div class="image-grid">
+      <!-- Replace src with your actual image paths -->
+      <div class="image-cell">
+        <img src="sabzi.jpeg" alt="Khoresh" onerror="this.style.background='#c07b2a44'">
+      </div>
+      <div class="image-cell">
+        <img src="stuffedpep.jpg" alt="Stuffed Peppers" onerror="this.style.background='#c07b2a44'">
+      </div>
+      <div class="grid-divider"></div>
+    </div>
+ 
+    <div class="captions">
+      <div class="caption">Khoresh</div>
+      <div class="caption">Stuffed Peppers</div>
+    </div>
+  </div>
+ 
+  <div class="section-rule"></div>
+ 
+  <!-- Rice & Tahdig -->
+  <div class="reveal">
+    <div class="section-header">
+      <div class="section-eyebrow">The Base and Basics</div>
+      <div class="section-title">Recipes</div>
+    </div>
+ 
+    <div class="category-banner category-banner--olive">
+      <div class="category-name">Rice &amp; Tahdig</div>
+    </div>
+ 
+    <div class="image-grid">
+      <div class="image-cell">
+        <img src="tahdig.jpeg" alt="Tahdig (rice)" onerror="this.style.background='#a89a5244'">
+      </div>
+      <div class="image-cell">
+        <img src="tahdig2.jpeg" alt="Tahdig (potato)" onerror="this.style.background='#a89a5244'">
+      </div>
+      <div class="grid-divider"></div>
+    </div>
+ 
+    <div class="captions">
+      <div class="caption">Tahdig (rice)</div>
+      <div class="caption">Tahdig (potato)</div>
+    </div>
+  </div>
+ 
+</section>
+ 
+<!-- ── BAZAAR ────────────────────────────────────────── -->
+<section id="bazaar" style="min-height:100vh;background:#fff;"></section>
+ 
+<!-- ── ABOUT ─────────────────────────────────────────── -->
+<section id="about" style="min-height:100vh;background:#fff;"></section>
+ 
+<!-- ── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="footer-title">Marianne's Kitchen</div>
+  <div class="footer-line">Persian Recipes &amp; Pantry</div>
+</footer>
+ 
+<script>
+  // ── Active nav on scroll ──────────────────────────────
+  const sections = ['home','recipes','bazaar','about'];
+  const navItems = document.querySelectorAll('.nav-item');
+ 
+  function setActive(id) {
+    navItems.forEach(a => {
+      const isActive = a.dataset.section === id;
+      a.classList.toggle('active', isActive);
+      if (isActive) {
+        // measure text width for underline
+        const span = document.createElement('span');
+        span.style.cssText = 'position:absolute;visibility:hidden;font-family:Cormorant Garamond,serif;font-size:48px';
+        span.textContent = a.textContent;
+        document.body.appendChild(span);
+        a.style.setProperty('--underline-w', span.offsetWidth + 'px');
+        document.body.removeChild(span);
+      }
+    });
+  }
+ 
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) setActive(e.target.id);
+    });
+  }, { threshold: 0.3 });
+ 
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+ 
+  // ── Reveal on scroll ──────────────────────────────────
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+ 
+  revealEls.forEach(el => revealObs.observe(el));
+ 
+  // ── Nav underline width on load ───────────────────────
+  setActive('home');
+</script>
+</body>
 </html>
+ 
